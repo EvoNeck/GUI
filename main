@@ -1,0 +1,116 @@
+local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/'
+
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+
+local UIS = game:GetService("UserInputService")
+
+local Window = Library:CreateWindow({
+   Title = 'Universal',
+    Center = true, 
+    AutoShow = true,
+})
+
+local Tabs = {
+    Main = Window:AddTab('Main'), 
+    ['UI Settings'] = Window:AddTab('Settings'),
+}
+
+local LocalGroupBox = Tabs.Main:AddLeftGroupbox('Local')
+
+local DefWS = LocalGroupBox:AddButton({
+    Text = 'Default Ws',
+    Func = function()
+        Options.Speed:SetValue(16)  
+    end,
+    DoubleClick = false,
+})
+
+local DefJP = DefWS:AddButton({
+    Text = 'Default Jp',
+    Func = function()
+      Options.Jump:SetValue(50)  
+    end,
+    DoubleClick = false,
+})
+
+LocalGroupBox:AddSlider('Speed', {
+    Text = 'Walk speed',
+    Default = 16,
+    Min = 0,
+    Max = 500,
+    Rounding = 0,
+    Compact = true,
+})
+
+LocalGroupBox:AddSlider('Jump', {
+    Text = 'Jump power',
+    Default = 50,
+    Min = 0,
+    Max = 500,
+    Rounding = 0,
+    Compact = true,
+})
+
+local Number1 = Options.Speed.Value
+Options.Speed:OnChanged(function()
+    local Number1 = Options.Speed.Value
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Number1
+end)
+
+local Number2 = Options.Jump.Value
+Options.Jump:OnChanged(function()
+    local Number2 = Options.Jump.Value
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = Number2
+end)
+
+local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+
+MenuGroup:AddButton('Unload', function() Library:Unload() end)
+MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' }) 
+
+Library.ToggleKeybind = Options.MenuKeybind
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+SaveManager:IgnoreThemeSettings() 
+SaveManager:SetIgnoreIndexes({ 'MenuKeybind' }) 
+ThemeManager:SetFolder('Universal utility')
+SaveManager:SetFolder('Universal utility/specific-game')
+SaveManager:BuildConfigSection(Tabs['UI Settings']) 
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
+
+local WatermarkSettingsGroupBox = Tabs['UI Settings']:AddRightGroupbox('Watermark')
+
+WatermarkSettingsGroupBox:AddToggle('WatermarkToggle', {
+    Text = 'Toggle watermark',
+    Default = true,
+    Tooltip = 'Toggles watermark',
+})
+
+Library:SetWatermarkVisibility(true)
+Library:SetWatermark('Universal utility by Mia^')
+
+Toggles.WatermarkToggle:OnChanged(function()
+    if Toggles.WatermarkToggle.Value == false then
+        Library:SetWatermarkVisibility(false)
+    elseif Toggles.WatermarkToggle.Value == true then
+        Library:SetWatermarkVisibility(true)
+    end
+end)
+
+
+
+WatermarkSettingsGroupBox:AddInput('WatermarkText', {
+    Default = 'Universal utility by Delact',
+    Numeric = false,
+    Finished = true,
+
+    Text = 'Watermark text',
+
+    Placeholder = 'Universal utility by Delact',
+})
+
+Options.WatermarkText:OnChanged(function()
+    Library:SetWatermark(Options.WatermarkText.Value)
+end)
