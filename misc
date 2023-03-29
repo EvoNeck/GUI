@@ -1,0 +1,109 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local gui = Library:create{
+    Name = "Main",
+    Theme = Library.Themes.Rust
+}
+
+local main = gui:tab{
+    Icon = "rbxassetid://5267823426",
+    Name = "Calculator"
+}
+
+local misc = gui:tab{
+    Name = "Misc"
+}
+
+gui:Credit{
+	Name = "Delact",
+	Description = "Script developer",
+	Discord = "Minor^Mia#0404"
+}
+
+gui:set_Status("Thanks for using my script!")
+
+num = "nil"
+blc = "Wood"
+
+local mainItems = {
+        Wood = {"Wood block", 1, 50, 250},
+        Smooth = {"Smooth wood block", 2, 50, 250},
+        Glass = {"Glass block", 3, 25, 250},
+        Stone = {"Stone block", 4, 50, 275},
+        Fabric = {"Fabric block", 5, 50, 300},
+        Plastic = {"Plastic block", 6, 50, 300},
+        Grass = {"Grass block", 7, 50, 300},
+        Sand = {"Sand block", 8, 50, 300},
+        Rusted = {"Rusted block", 9, 50, 300},
+        Bouncy = {"Bouncy block", 10, 50, 300},
+        Metal = {"Metal block", 11, 50, 325},
+        Concrete = {"Concrete block", 12, 50, 350},
+        Ice = {"Ice block", 13, 50, 350},
+        Coal = {"Coal block", 14, 50, 375},
+        Brick = {"Brick block", 15, 50, 375},
+        Marble = {"Marble block", 16, 50, 375},
+        Titanium = {"Titanium block", 17, 50, 400},
+        Obsidian = {"Obsidian block", 18, 50, 425}
+    },
+
+main:dropdown({
+    Name = "Select block",
+    StartingText = "Wood block",
+    Items = {
+        {"Wood block", "Wood"},
+        {"Smooth wood block", "Smooth"},
+        {"Glass block", "Glass"},
+        {"Stone block", "Stone"},
+        {"Fabric block", "Fabric"},
+        {"Plastic block", "Plastic"},
+        {"Grass block", "Grass"},
+        {"Sand block", "Sand"},
+        {"Rusted block", "Rusted"},
+        {"Bouncy block", "Bounce"},
+        {"Metal block", "Metal"},
+        {"Concrete block", "Concrete"},
+        {"Ice block", "Ice"},
+        {"Coal block", "Coal"},
+        {"Brick block", "Brick"},
+        {"Marble block", "Marble"},
+        {"Titanium block", "Titanium"},
+        {"Obsidian block", "Obsidian"}
+    },
+    Description = "Select a block to calculate",
+    Callback = function(v)
+        blc = v
+    end,
+})
+
+main:textbox{
+    Name = "Blocks number",
+    Callback = function(v)
+    num = v
+end
+}
+
+main:button{
+    Name = "Calculate",
+    Description = "Calculate a block cost",
+    Callback = function()
+    main:prompt{
+        Title = "Result:",
+        Text = "~ " .. mainItems[blc][4] / mainItems[blc][3] * num
+    } 
+end
+}
+
+misc:toggle{
+    Name = "Build mode",
+    StartingState = false,
+    Description = "Toggle build mode",
+    Callback = function(state)
+        if state == true then
+            game:GetService("Players").LocalPlayer.PlayerGui.GoldGui.Frame.Visible = false
+            game:GetService("Players").LocalPlayer.PlayerGui.ShopGui.SideFrame.Visible = false
+            game:GetService("Players").LocalPlayer.PlayerGui.LaunchBoatGui.LaunchFrame.Visible = false
+            game:GetService("Players").LocalPlayer.PlayerGui.PlayerListGui.Frame.Visible = false
+        elseif state == false then
+            game.Players.LocalPlayer.Character.Humanoid.Health = 0
+end
+end
+}
